@@ -453,7 +453,24 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
+    foods = foodGrid.asList()
+    walls = problem.walls
+
+    def taxi(point_a,point_b):
+        x1,y1 = point_a 
+        x2,y2 = point_b 
+        return abs(x1 - x2) + abs(y1 - y2)
+    
+    #first iteration: manhattan distance of all remaining food and return max as the heuristic ~ 9000 nodes
+    #second iteration: use mazeDistance function instead of my written manhattan distance function ~ 4000 nodes
+
+    # if food:
+    #     distances = [taxi(position, food) for food in foods]
+    #     return max(distances)
+    if foods:
+        distances = [mazeDistance(food, position, problem.startingGameState) for food in foods]
+        return max(distances)
+    
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -485,7 +502,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.bfs(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -521,7 +538,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.food[x][y]
 
 def mazeDistance(point1, point2, gameState):
     """
